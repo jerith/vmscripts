@@ -43,6 +43,10 @@ replace the `GRUB_CMDLINE_LINUX_DEFAULT` entry with the following:
 
     GRUB_CMDLINE_LINUX_DEFAULT="console=tty0 console=ttyS0,115200n8"
 
+I also set `GRUB_TERMINAL=serial` to see the grub screen (even though I can't
+interact with it) and `GRUB_TIMEOUT=1` to minimise the startup time. Neither of
+these are strictly required, though.
+
 To disable `getty` on the serial terminal:
 
     systemctl mask serial-getty@ttyS0.service
