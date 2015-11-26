@@ -45,7 +45,10 @@ replace the `GRUB_CMDLINE_LINUX_DEFAULT` entry with the following:
 
 I also set `GRUB_TERMINAL=serial` to see the grub screen (even though I can't
 interact with it) and `GRUB_TIMEOUT=1` to minimise the startup time. Neither of
-these are strictly required, though.
+these are strictly required, though. Also not strictly necessary, although it
+does make the output faster, is explicitly setting up the serial device:
+
+    GRUB_SERIAL_COMMAND="serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1"
 
 To disable `getty` on the serial terminal:
 
