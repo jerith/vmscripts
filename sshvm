@@ -1,0 +1,8 @@
+#!/bin/bash -e
+
+VMNAME=${1?Must provide VM name}
+shift
+
+VMIP=$(vmip $VMNAME)
+
+exec ssh $VMIP "$@"

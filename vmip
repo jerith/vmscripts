@@ -1,0 +1,16 @@
+#!/bin/bash
+
+VMNAME=${1?Must provide VM name}
+shift
+
+PATTERN="/VirtualBox/GuestInfo/Net/*/V4/IP"
+VMPROPS="VBoxManage guestproperty enumerate"
+
+VMIP=$($VMPROPS $VMNAME --patterns "$PATTERN" | grep -o '192\.168\.\d\+\.\d\+')
+
+if [ -z "$VMIP" ]; then
+    echo "No IP found for $VMNAME. Is it running?" >&2
+    exit 1
+fi
+
+echo $VMIP

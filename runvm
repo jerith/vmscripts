@@ -1,0 +1,33 @@
+#!/bin/bash
+
+VMNAME=${1?Must provide VM name}
+shift
+
+CONSOLESOCKET=$(mktemp -t "vmconsole-$VMNAME")
+
+set -m
+trap ctrl_c_first INT
+
+function ctrl_c_first() {
+    echo "Sending shutdown command (acpipowerbutton)..."
+    VBoxManage controlvm "$VMNAME" acpipowerbutton
+}
+
+function ctrl_c_fallback() {
+    echo "Sending shutdown command harder (poweroff soft)..."
+    VBoxManage controlvm "$VMNAME" poweroff soft
+}
+
+VBoxManage modifyvm "$VMNAME" --uartmode1 server "$CONSOLESOCKET"
+VBoxHeadless -s "$VMNAME" &
+runpid=$!
+
+while [ ! -S "$CONSOLESOCKET" ]; do sleep 0.1; done
+socat unix-client:"$CONSOLESOCKET" stdout &
+consolepid=$!
+
+wait $runpid $consolepid
+trap ctrl_c_fallback INT
+wait $runpid $consolepid
+trap INT
+wait $runpid $consolepid
