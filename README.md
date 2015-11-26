@@ -27,6 +27,9 @@ The scripts make a few assumptions about the VMs:
  * There is a network adapter that the host can reach with an IP in the
    `196.168.0.0/16` range. (Hardcoded in `vmip`, but easy enough to change.)
 
+ * VirtualBox Guest Additions are installed in the VM so `vmip` (and `sshvm`)
+   can find the relevant IP.
+
  * There is a serial port configured on `COM1`. `runvm` will set its mode to
    `Host Pipe` pointing to a suitable temp file.
 
